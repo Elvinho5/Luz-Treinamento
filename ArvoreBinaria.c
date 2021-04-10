@@ -5,7 +5,7 @@
 //------------------------ estrutura do nó e da árvore ----------------------------------
 typedef struct No{   
     int valor;
-    struct No *proximo,*anterior;
+    struct No *direita,*esquerda;
 }No;
 
 typedef struct Arvore{   
@@ -18,16 +18,16 @@ No* inserirnovo (No *raiz, int valor){
     if (raiz == NULL){
         No *novo = (No*)malloc(sizeof(No));
         novo->valor = valor;
-        novo->anterior = NULL;
-        novo->proximo = NULL;
+        novo->esquerda = NULL;
+        novo->direita = NULL;
         return novo;
     }
     else{
         if(valor<raiz->valor){
-            raiz->anterior = inserirnovo(raiz->anterior,valor);
+            raiz->esquerda = inserirnovo(raiz->esquerda,valor);
         }
         if(valor>raiz->valor){
-            raiz->proximo = inserirnovo(raiz->proximo, valor);
+            raiz->direita = inserirnovo(raiz->direita, valor);
         }
         return raiz;
     }
@@ -40,40 +40,40 @@ No* remover (No *raiz, int valor){
     }
     else{
         if(raiz->valor == valor){
-            if(raiz->anterior == NULL && raiz->proximo == NULL){
+            if(raiz->esquerda == NULL && raiz->direita == NULL){
                 free(raiz);
                 return(NULL); //remover os nós que não tem ligações com esq ou dir
             }
             else{  
-                if(raiz->anterior == NULL || raiz->proximo == NULL){ //remover nós que tem uma ligação
+                if(raiz->esquerda == NULL || raiz->direita == NULL){ //remover nós que tem uma ligação
                     No *aux;
-                    if(raiz->anterior != NULL){
-                        aux = raiz->anterior;
+                    if(raiz->esquerda != NULL){
+                        aux = raiz->esquerda;
                     }
                     else{
-                        aux = raiz->proximo;
+                        aux = raiz->direita;
                     }
                     free(raiz);
                     return aux;
                 }
                 else{//remover um nó que tem 2 ligações
-                    No *aux = raiz->anterior;
-                    while(aux->proximo != NULL){
-                        aux = aux->proximo;
+                    No *aux = raiz->esquerda;
+                    while(aux->direita != NULL){
+                        aux = aux->direita;
                     }
                     raiz->valor = aux->valor;
                     aux->valor = valor;
-                    raiz->anterior = remover(raiz->anterior,valor);
+                    raiz->esquerda = remover(raiz->esquerda,valor);
                     return raiz;
                 }
             }
         }
         else{
             if(valor < raiz->valor){
-                raiz->anterior = remover(raiz->anterior,valor);
+                raiz->esquerda = remover(raiz->esquerda,valor);
             }
             else{
-                raiz->proximo = remover(raiz->proximo,valor);
+                raiz->direita = remover(raiz->direita,valor);
             }
             return raiz;
         }
@@ -85,7 +85,7 @@ int tamanho (No *raiz){
         return 0;
     }
     else{
-        return 1 + tamanho(raiz->anterior) + tamanho(raiz->proximo);    
+        return 1 + tamanho(raiz->esquerda) + tamanho(raiz->direita);    
     }
 }
 //---------------------------- buscar um valor na árvore -------------------------
@@ -99,10 +99,10 @@ int buscar(No *raiz, int valor){
         }
         else{
             if (valor < raiz->valor){
-                return buscar(raiz->anterior, valor);
+                return buscar(raiz->esquerda, valor);
             }
             else{
-                return buscar(raiz->proximo,valor);
+                return buscar(raiz->direita,valor);
             }
         }
     }
@@ -110,9 +110,9 @@ int buscar(No *raiz, int valor){
 //--------------------------- imprimir a árvore completa ----------------------------
 void imprimir (No *raiz){
     if (raiz != NULL){
-        imprimir(raiz->anterior);
+        imprimir(raiz->esquerda);
         printf("  %d", raiz->valor);
-        imprimir(raiz->proximo);
+        imprimir(raiz->direita);
     }
 }
 //-------------------------------------MAIN---------------------------------------------
@@ -134,7 +134,7 @@ int main (){
             printf("Impressao da arvore\n");
             imprimir(raiz);
             printf("\n");
-            printf("O tamanho da arvore é %d\n", tamanho(raiz));
+            printf("O tamanho da arvore e %d\n", tamanho(raiz));
             printf("\n");
             break;
         case 3:
