@@ -115,13 +115,31 @@ void imprimir (No *raiz){
         imprimir(raiz->direita);
     }
 }
+
+
+void imprimirpre (No *raiz){
+    if (raiz != NULL){
+        printf("  %d", raiz->valor);
+        imprimirpre (raiz->esquerda);
+        imprimirpre (raiz->direita);
+    }
+}
+
+void imprimirpos (No *raiz){
+    if (raiz != NULL){
+        imprimirpos (raiz->direita);
+        imprimirpos (raiz->esquerda);
+        printf("  %d", raiz->valor);
+    }
+
+}
 //-------------------------------------MAIN---------------------------------------------
 int main (){
     int opcao, valor;
     No *raiz = NULL;
 
     do{
-        printf(" 1 - Inserir\n 2 - Imprimir\n 3 - Buscar\n 4 - Remover\n 0 - Sair\n");
+        printf(" 1 - Inserir\n 2 - Imprimir\n 3 - Buscar\n 4 - Remover\n 5 - Imprimir Pre Oredem\n 6 - Imprimir Pos Ordem\n 7 - Limpar Arvore\n 0 - Sair\n");
         scanf("%d", &opcao);
         switch (opcao)
         {
@@ -148,6 +166,20 @@ int main (){
             scanf("%d",&valor);
             raiz = remover(raiz,valor);
             printf("\n");
+            break;
+        case 5:
+            printf("Impressao da arvore pre ordem\n");
+            imprimirpre(raiz);
+            printf("\n");
+            break;
+        case 6:
+            printf("Impressao da arvore pos ordem\n");
+            imprimirpos(raiz);
+            printf("\n");
+            break;
+        case 7:
+            printf("Raiz vazia");
+            free(raiz);
             break;
         case 0:
             printf("Finalizando...");
